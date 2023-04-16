@@ -1,0 +1,27 @@
+# Compiled
+dist/
+
+# Externally downloaded assets
+external-assets/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+
+# Mac crap
+.DS_Store

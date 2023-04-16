@@ -1,0 +1,56 @@
+@use "./Theme";
+
+.icon-wrapper {
+  display: inline-flex;
+  position: relative;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  display: inline-block;
+  position: relative;
+
+  text-align: center;
+
+  pointer-events: none;
+
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  &.icon-ti {
+    fill: none;
+    stroke-width: 2;
+  }
+
+  &.icon-gi {
+    fill: currentColor;
+    stroke-width: 1;
+  }
+
+  &.icon-badge {
+    position: absolute;
+  }
+
+  &.icon-top-left {
+    top: 0;
+    left: 0;
+  }
+
+  &.icon-top-right {
+    top: 0;
+    right: 0;
+  }
+
+  &.icon-bottom-left {
+    bottom: 0;
+    left: 0;
+  }
+
+  &.icon-bottom-right {
+    bottom: 0;
+    right: 0;
+  }
+}

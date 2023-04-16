@@ -1,0 +1,61 @@
+{
+  "name": "lumindor",
+  "version": "0.0.1",
+  "description": "Lumindor RPG",
+  "author": "Pouya Larjani <pouya.larjani@gmail.com> (https://github.com/lepouya)",
+  "main": "src/index.pug",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lepouya/Lumindor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lepouya/Lumindor/issues"
+  },
+  "homepage": "https://github.com/lepouya/Lumindor#readme",
+  "keywords": [
+    "Anime",
+    "RPG",
+    "Action",
+    "Idle",
+    "Gacha"
+  ],
+  "scripts": {
+    "start": "webpack serve",
+    "debug": "webpack",
+    "build": "webpack --mode=production",
+    "test": "mocha -r ts-node/register test/**/*.ts",
+    "sprites": "ts-node scripts/make-sprites.ts",
+    "update": "ncu --doctor -u && rm -rf node_modules && npm update",
+    "release": "webpack --mode=production --env clean -o ../lepouya.github.io/Lumindor/"
+  },
+  "dependencies": {
+    "break_eternity.js": "^1.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.10.0",
+    "react-router-dom": "^6.10.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.35",
+    "@types/react-dom": "^18.0.11",
+    "@types/webpack": "^5.28.1",
+    "chai": "^4.3.7",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "mocha": "^10.2.0",
+    "npm-check-updates": "^16.10.8",
+    "pug-plugin": "^4.9.7",
+    "sass": "^1.62.0",
+    "sass-loader": "^13.2.2",
+    "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.3"
+  }
+}

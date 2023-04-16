@@ -1,0 +1,35 @@
+@use "./Theme";
+
+.progress-circle {
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  > .children {
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  > svg {
+    position: absolute;
+    pointer-events: none;
+
+    > path {
+      fill: transparent;
+      fill-opacity: 0;
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+  }
+
+  .primary {
+    stroke: Theme.color(positive);
+  }
+
+  .secondary {
+    stroke: Theme.color(neutral);
+  }
+}
