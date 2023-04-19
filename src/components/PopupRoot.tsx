@@ -142,6 +142,7 @@ function registerOfflineSummary({
       if (!loadUpdate) {
         return null;
       } else if (keys.length === 0) {
+        popupManager.delPopupState("OfflineSummary");
         return <div className="full">Nothing happened!</div>;
       } else if (keys.length > settings.offlineSummaryMaxUpdates) {
         remainder = keys.splice(settings.offlineSummaryMaxUpdates - 1).length;
