@@ -13,7 +13,7 @@ export default function initCharDesigner(_context: Context) {
     body: () => <CharDesigner />,
   });
 
-  ["lightgray", "white", "lightgreen", "lightblue", "gold", "orchid"].map(
+  ["lightgray", "white", "lightgreen", "lightblue", "orchid", "gold"].map(
     (color, idx) =>
       Character.registerComponent({
         type: "rank",
@@ -43,9 +43,9 @@ export default function initCharDesigner(_context: Context) {
 }
 
 function CharDesigner() {
-  const [rank, setRank] = useState("rank-02");
-  const [char, setChar] = useState("char-12");
-  const [body, setBody] = useState("body-11");
+  const [rank, setRank] = useState("rank-00");
+  const [char, setChar] = useState("char-00");
+  const [body, setBody] = useState("");
 
   return (
     <div className="panel">

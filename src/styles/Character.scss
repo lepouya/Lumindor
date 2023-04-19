@@ -14,7 +14,7 @@ $cw: min(512px, 40vh, 80vw);
   border: 1px solid gray;
   box-sizing: content-box;
 
-  > .item {
+  .item {
     position: absolute;
 
     left: 0px;
@@ -29,7 +29,11 @@ $cw: min(512px, 40vh, 80vw);
     background-repeat: no-repeat;
     background-size: contain;
     background-blend-mode: normal;
+  }
 
-    filter: drop-shadow(0 0 5px #00000080);
+  .glow {
+    --color: #00000080;
+    filter: drop-shadow(5px 0 2px var(--color))
+      drop-shadow(-5px 0 2px var(--color));
   }
 }

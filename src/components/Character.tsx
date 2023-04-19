@@ -9,6 +9,9 @@ export type CharacterProps = {
 
   className?: string;
   style?: React.CSSProperties;
+
+  additionalComponentsClassName?: string;
+  additionalComponentsStyle?: React.CSSProperties;
 };
 
 export default function Character(props: PropsWithChildren<CharacterProps>) {
@@ -32,11 +35,22 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
     return aOrder - bOrder;
   });
 
+  let style = props.style;
+  if (props.scale && props.scale !== 1) {
+    style = { ...style, "--scale": props.scale };
+  }
+
+  let glowClass = "",
+    glowStyle = {};
+  components.forEach((component) => {
+    if (component.type === "rank" && component.color) {
+      glowClass = "glow";
+      glowStyle = { "--color": component.color };
+    }
+  });
+
   return (
-    <div
-      className={Arr.className("character", props.className)}
-      style={props.style}
-    >
+    <div className={Arr.className("character", props.className)} style={style}>
       {components.map((component, idx) => {
         const zIndex =
           component.zIndex ?? defaultComponentOrder[component.type];
@@ -48,13 +62,20 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
         const animation = component.animation;
         const style = {
           ...component.style,
+          ...props.additionalComponentsStyle,
+          ...(component.type !== "rank" && !component.color ? glowStyle : {}),
           backgroundColor,
           backgroundImage,
           filter,
           animation,
           zIndex,
         };
-        const className = Arr.className("item", component.className);
+        const className = Arr.className(
+          "item",
+          component.className,
+          props.additionalComponentsClassName,
+          component.type !== "rank" && !component.color && glowClass,
+        );
 
         return (
           <div
