@@ -1,6 +1,9 @@
 # Compiled
 dist/
 
+# Raw output from Stable Diffusion
+assets/raw
+
 # Externally downloaded assets
 external-assets/
 
