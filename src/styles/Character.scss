@@ -1,0 +1,35 @@
+@use "./Theme";
+
+$cw: min(512px, 40vh, 80vw);
+
+.character {
+  position: relative;
+  display: inline;
+  flex: none;
+
+  --scale: 1;
+  width: calc(var(--scale, 1) * $cw);
+  height: calc(2 * var(--scale, 1) * $cw);
+
+  border: 1px solid gray;
+  box-sizing: content-box;
+
+  > .item {
+    position: absolute;
+
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+
+    background-attachment: scroll;
+    background-clip: content-box;
+    background-origin: content-box;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-blend-mode: normal;
+
+    filter: drop-shadow(0 0 5px #00000080);
+  }
+}
