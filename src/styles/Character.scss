@@ -32,8 +32,16 @@ $cw: min(512px, 40vh, 80vw);
   }
 
   .glow {
-    --color: #00000080;
-    filter: drop-shadow(5px 0 2px var(--color))
-      drop-shadow(-5px 0 2px var(--color));
+    --glow-color: #00000080;
+    --glow-scale: 1;
+
+    filter: drop-shadow(
+        calc(var(--glow-scale) * 5px) 0 calc(var(--glow-scale) / 2 * 5px)
+          var(--glow-color)
+      )
+      drop-shadow(
+        calc(var(--glow-scale) * -5px) 0 calc(var(--glow-scale) / 2 * 5px)
+          var(--glow-color)
+      );
   }
 }

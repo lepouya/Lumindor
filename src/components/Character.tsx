@@ -45,7 +45,7 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
   components.forEach((component) => {
     if (component.type === "rank" && component.color) {
       glowClass = "glow";
-      glowStyle = { "--color": component.color };
+      glowStyle = { "--glow-color": component.color };
     }
   });
 
@@ -56,19 +56,20 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
           component.zIndex ?? defaultComponentOrder[component.type];
         const backgroundColor = component.color;
         const backgroundImage = component.fileName
-          ? `url(/characters/${component.fileName}.png)`
+          ? `url(characters/${component.fileName}.png)`
           : undefined;
         const filter = component.effects;
         const animation = component.animation;
         const style = {
           ...component.style,
           ...props.additionalComponentsStyle,
-          ...(component.type !== "rank" && !component.color ? glowStyle : {}),
           backgroundColor,
           backgroundImage,
           filter,
           animation,
           zIndex,
+          ...(component.type !== "rank" && !component.color ? glowStyle : {}),
+          "--glow-scale": component.glowScale ?? 1,
         };
         const className = Arr.className(
           "item",
@@ -88,13 +89,23 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
       {overlayComponents.map((component, idx) => {
         const zIndex =
           10 + (component.zIndex ?? defaultComponentOrder[component.type]);
-        const backgroundImage = `url(/characters/${component.overlayFileName}.png)`;
+        const backgroundImage = `url(characters/${component.overlayFileName}.png)`;
         const style = {
           ...component.style,
           backgroundImage,
           zIndex,
+          ...(component.type !== "rank" &&
+          !component.color &&
+          component.overlayGlowScale
+            ? glowStyle
+            : {}),
+          "--glow-scale": component.overlayGlowScale ?? 1,
         };
-        const className = Arr.className("item", component.className);
+        const className = Arr.className(
+          "item",
+          component.className,
+          component.overlayGlowScale && glowClass,
+        );
 
         return (
           <div
@@ -118,6 +129,9 @@ export type Component = {
 
   zIndex?: number;
   overlayZIndex?: number;
+
+  glowScale?: number;
+  overlayGlowScale?: number;
 
   color?: string;
   effects?: string;
