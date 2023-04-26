@@ -48,7 +48,7 @@ export default function initCharDesigner(_context: Context) {
       name: `head-${idx}`,
       fileName: `head-${idx}`,
       overlayFileName: `head-${idx}-fg`,
-      overlayGlowScale: 2,
+      className: "glow-above",
     });
   }
 
@@ -58,17 +58,18 @@ export default function initCharDesigner(_context: Context) {
       type: "feet",
       name: `feet-${idx}`,
       fileName: `feet-${idx}`,
-      glowScale: 2,
+      glowScale: 1,
+      className: "glow-below",
     });
   }
 }
 
 function CharDesigner() {
-  const [rank, setRank] = useState("rank-01");
+  const [rank, setRank] = useState("rank-02");
   const [char, setChar] = useState("char-16");
   const [body, setBody] = useState("body-11");
-  const [head, setHead] = useState("");
-  const [feet, setFeet] = useState("");
+  const [head, setHead] = useState("head-01");
+  const [feet, setFeet] = useState("feet-01");
 
   return (
     <div className="panel">

@@ -40,12 +40,13 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
     style = { ...style, "--scale": props.scale };
   }
 
+  // Set the default glow color to be the background rank color
   let glowClass = "",
-    glowStyle = {};
+    glowStyle: React.CSSProperties = { "--glow-scale": 1 };
   components.forEach((component) => {
     if (component.type === "rank" && component.color) {
       glowClass = "glow";
-      glowStyle = { "--glow-color": component.color };
+      glowStyle = { ...glowStyle, "--glow-color": component.color };
     }
   });
 
@@ -68,7 +69,7 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
           filter,
           animation,
           zIndex,
-          ...(component.type !== "rank" && !component.color ? glowStyle : {}),
+          ...glowStyle,
           "--glow-scale": component.glowScale ?? 1,
         };
         const className = Arr.className(
@@ -94,11 +95,7 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
           ...component.style,
           backgroundImage,
           zIndex,
-          ...(component.type !== "rank" &&
-          !component.color &&
-          component.overlayGlowScale
-            ? glowStyle
-            : {}),
+          ...glowStyle,
           "--glow-scale": component.overlayGlowScale ?? 1,
         };
         const className = Arr.className(

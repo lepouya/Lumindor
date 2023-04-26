@@ -44,4 +44,40 @@ $cw: min(512px, 40vh, 80vw);
           var(--glow-color)
       );
   }
+
+  .glow-above {
+    --glow-color: #00000080;
+    --glow-scale: 1;
+
+    filter: drop-shadow(
+        0 calc(var(--glow-scale) * -10px) calc(var(--glow-scale) / 2 * 10px)
+          var(--glow-color)
+      )
+      drop-shadow(
+        calc(var(--glow-scale) * 5px) 0 calc(var(--glow-scale) / 2 * 5px)
+          var(--glow-color)
+      )
+      drop-shadow(
+        calc(var(--glow-scale) * -5px) 0 calc(var(--glow-scale) / 2 * 5px)
+          var(--glow-color)
+      );
+  }
+
+  .glow-below {
+    --glow-color: #00000080;
+    --glow-scale: 1;
+
+    filter: drop-shadow(
+        0 calc(var(--glow-scale) * 10px) calc(var(--glow-scale) / 2 * 10px)
+          var(--glow-color)
+      )
+      drop-shadow(
+        calc(var(--glow-scale) * 5px) 0 calc(var(--glow-scale) / 2 * 5px)
+          var(--glow-color)
+      )
+      drop-shadow(
+        calc(var(--glow-scale) * -5px) 0 calc(var(--glow-scale) / 2 * 5px)
+          var(--glow-color)
+      );
+  }
 }
