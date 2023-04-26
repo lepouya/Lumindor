@@ -32,7 +32,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 13; i++) {
+  for (let i = 1; i <= 14; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "body",
@@ -52,17 +52,17 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 4; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "hand",
       name: `hand-${idx}`,
       fileName: `hand-${idx}`,
-      className: "glow-below",
+      // className: "glow-below",
     });
   }
 
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 5; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "feet",
@@ -71,21 +71,31 @@ export default function initCharDesigner(_context: Context) {
       className: "glow-below",
     });
   }
+
+  for (let i = 1; i <= 1; i++) {
+    const idx = i.toString().padStart(2, "0");
+    Character.registerComponent({
+      type: "amulet",
+      name: `amulet-${idx}`,
+      fileName: `amulet-${idx}`,
+    });
+  }
 }
 
 function CharDesigner() {
-  const [rank, setRank] = useState("rank-02");
-  const [char, setChar] = useState("char-16");
-  const [body, setBody] = useState("body-13");
+  const [rank, setRank] = useState("rank-00");
+  const [char, setChar] = useState("char-03");
+  const [body, setBody] = useState("");
   const [head, setHead] = useState("");
-  const [hand, setHand] = useState("hand-03");
-  const [feet, setFeet] = useState("feet-03");
+  const [hand, setHand] = useState("");
+  const [feet, setFeet] = useState("");
+  const [amulet, setAmulet] = useState("");
 
   return (
     <div className="panel">
       <div className="title-bar">Preview</div>
       <div className="left">
-        <Character components={[rank, char, body, head, hand, feet]} />
+        <Character components={[rank, char, body, head, hand, feet, amulet]} />
       </div>
 
       <div className="panel right half">
@@ -131,6 +141,13 @@ function CharDesigner() {
           type="feet"
           value={feet}
           setValue={setFeet}
+        />
+
+        <CharDesignerSelector
+          title="Amulet"
+          type="amulet"
+          value={amulet}
+          setValue={setAmulet}
         />
       </div>
     </div>
