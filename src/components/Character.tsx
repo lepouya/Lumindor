@@ -138,7 +138,7 @@ export type Component = {
   style?: React.CSSProperties;
 };
 
-type ComponentType =
+export type ComponentType =
   | "rank"
   | "char"
   | "body"

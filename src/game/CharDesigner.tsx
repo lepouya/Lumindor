@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import Character from "../components/Character";
+import Character, { ComponentType } from "../components/Character";
 import Game from "../components/Game";
 import { Context } from "../model/Context";
 
@@ -32,7 +32,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 12; i++) {
+  for (let i = 1; i <= 13; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "body",
@@ -41,7 +41,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 1; i++) {
+  for (let i = 1; i <= 2; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "head",
@@ -52,13 +52,22 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 1; i++) {
+  for (let i = 1; i <= 3; i++) {
+    const idx = i.toString().padStart(2, "0");
+    Character.registerComponent({
+      type: "hand",
+      name: `hand-${idx}`,
+      fileName: `hand-${idx}`,
+      className: "glow-below",
+    });
+  }
+
+  for (let i = 1; i <= 3; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "feet",
       name: `feet-${idx}`,
       fileName: `feet-${idx}`,
-      glowScale: 1,
       className: "glow-below",
     });
   }
@@ -69,107 +78,92 @@ function CharDesigner() {
   const [char, setChar] = useState("char-16");
   const [body, setBody] = useState("body-11");
   const [head, setHead] = useState("head-01");
+  const [hand, setHand] = useState("hand-01");
   const [feet, setFeet] = useState("feet-01");
 
   return (
     <div className="panel">
       <div className="title-bar">Preview</div>
       <div className="left">
-        <Character components={[rank, char, body, head, feet]} />
+        <Character components={[rank, char, body, head, hand, feet]} />
       </div>
 
       <div className="panel right half">
         <div className="title-bar">Character Design</div>
-        <div className="half right">
-          <span>Rank: &nbsp;</span>
-        </div>
-        <div className="half left">
-          <select
-            name="rank"
-            value={rank}
-            onChange={(event) => setRank(event.target.value)}
-          >
-            <option value="">none</option>
-            {Character.getComponentsByType("rank").map((c) => (
-              <option key={c.name} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
 
-        <div className="half right">
-          <span>Character: &nbsp;</span>
-        </div>
-        <div className="half left">
-          <select
-            name="char"
-            value={char}
-            onChange={(event) => setChar(event.target.value)}
-          >
-            <option value="">none</option>
-            {Character.getComponentsByType("char").map((c) => (
-              <option key={c.name} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CharDesignerSelector
+          title="Rank"
+          type="rank"
+          value={rank}
+          setValue={setRank}
+        />
 
-        <div className="half right">
-          <span>Armor: &nbsp;</span>
-        </div>
-        <div className="half left">
-          <select
-            name="body"
-            value={body}
-            onChange={(event) => setBody(event.target.value)}
-          >
-            <option value="">none</option>
-            {Character.getComponentsByType("body").map((c) => (
-              <option key={c.name} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CharDesignerSelector
+          title="Character"
+          type="char"
+          value={char}
+          setValue={setChar}
+        />
 
-        <div className="half right">
-          <span>Helmet: &nbsp;</span>
-        </div>
-        <div className="half left">
-          <select
-            name="head"
-            value={head}
-            onChange={(event) => setHead(event.target.value)}
-          >
-            <option value="">none</option>
-            {Character.getComponentsByType("head").map((c) => (
-              <option key={c.name} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CharDesignerSelector
+          title="Armor"
+          type="body"
+          value={body}
+          setValue={setBody}
+        />
 
-        <div className="half right">
-          <span>Feet: &nbsp;</span>
-        </div>
-        <div className="half left">
-          <select
-            name="feet"
-            value={feet}
-            onChange={(event) => setFeet(event.target.value)}
-          >
-            <option value="">none</option>
-            {Character.getComponentsByType("feet").map((c) => (
-              <option key={c.name} value={c.name}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <CharDesignerSelector
+          title="Helmet"
+          type="head"
+          value={head}
+          setValue={setHead}
+        />
+
+        <CharDesignerSelector
+          title="Hands"
+          type="hand"
+          value={hand}
+          setValue={setHand}
+        />
+
+        <CharDesignerSelector
+          title="Feet"
+          type="feet"
+          value={feet}
+          setValue={setFeet}
+        />
       </div>
     </div>
+  );
+}
+
+type CharDesignerSelectorProps = {
+  title: string;
+  type: ComponentType;
+  value: string;
+  setValue: (value: string) => void;
+};
+
+function CharDesignerSelector(props: CharDesignerSelectorProps) {
+  return (
+    <>
+      <div className="half right">
+        <span>{props.title}: &nbsp;</span>
+      </div>
+      <div className="half left">
+        <select
+          name={props.type}
+          value={props.value}
+          onChange={(event) => props.setValue(event.target.value)}
+        >
+          <option value="">none</option>
+          {Character.getComponentsByType(props.type).map((c) => (
+            <option key={c.name} value={c.name}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   );
 }
