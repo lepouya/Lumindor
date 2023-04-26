@@ -83,7 +83,7 @@ export default function initCharDesigner(_context: Context) {
 }
 
 function CharDesigner() {
-  const [rank, setRank] = useState("rank-00");
+  const [rank, setRank] = useState("rank-02");
   const [char, setChar] = useState("char-03");
   const [body, setBody] = useState("");
   const [head, setHead] = useState("");
