@@ -76,10 +76,10 @@ export default function initCharDesigner(_context: Context) {
 function CharDesigner() {
   const [rank, setRank] = useState("rank-02");
   const [char, setChar] = useState("char-16");
-  const [body, setBody] = useState("body-11");
-  const [head, setHead] = useState("head-01");
-  const [hand, setHand] = useState("hand-01");
-  const [feet, setFeet] = useState("feet-01");
+  const [body, setBody] = useState("body-13");
+  const [head, setHead] = useState("");
+  const [hand, setHand] = useState("hand-03");
+  const [feet, setFeet] = useState("feet-03");
 
   return (
     <div className="panel">

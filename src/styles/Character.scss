@@ -54,12 +54,12 @@ $cw: min(512px, 40vh, 80vw);
           var(--glow-color)
       )
       drop-shadow(
-        calc(var(--glow-scale) * 5px) 0 calc(var(--glow-scale) / 2 * 5px)
-          var(--glow-color)
+        calc(var(--glow-scale) * 5px) calc(var(--glow-scale) * -5px)
+          calc(var(--glow-scale) / 2 * 5px) var(--glow-color)
       )
       drop-shadow(
-        calc(var(--glow-scale) * -5px) 0 calc(var(--glow-scale) / 2 * 5px)
-          var(--glow-color)
+        calc(var(--glow-scale) * -5px) calc(var(--glow-scale) * -5px)
+          calc(var(--glow-scale) / 2 * 5px) var(--glow-color)
       );
   }
 
@@ -72,12 +72,12 @@ $cw: min(512px, 40vh, 80vw);
           var(--glow-color)
       )
       drop-shadow(
-        calc(var(--glow-scale) * 5px) 0 calc(var(--glow-scale) / 2 * 5px)
-          var(--glow-color)
+        calc(var(--glow-scale) * 5px) calc(var(--glow-scale) * 5px)
+          calc(var(--glow-scale) / 2 * 5px) var(--glow-color)
       )
       drop-shadow(
-        calc(var(--glow-scale) * -5px) 0 calc(var(--glow-scale) / 2 * 5px)
-          var(--glow-color)
+        calc(var(--glow-scale) * -5px) calc(var(--glow-scale) * 5px)
+          calc(var(--glow-scale) / 2 * 5px) var(--glow-color)
       );
   }
 }
