@@ -41,7 +41,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 2; i++) {
+  for (let i = 1; i <= 3; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "head",
@@ -72,6 +72,15 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
+  for (let i = 1; i <= 5; i++) {
+    const idx = i.toString().padStart(2, "0");
+    Character.registerComponent({
+      type: "weapon",
+      name: `weapon-${idx}`,
+      fileName: `weapon-${idx}`,
+    });
+  }
+
   for (let i = 1; i <= 1; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
@@ -83,19 +92,22 @@ export default function initCharDesigner(_context: Context) {
 }
 
 function CharDesigner() {
-  const [rank, setRank] = useState("rank-02");
+  const [rank, setRank] = useState("rank-00");
   const [char, setChar] = useState("char-03");
   const [body, setBody] = useState("");
   const [head, setHead] = useState("");
   const [hand, setHand] = useState("");
   const [feet, setFeet] = useState("");
+  const [weapon, setWeapon] = useState("");
   const [amulet, setAmulet] = useState("");
 
   return (
     <div className="panel">
       <div className="title-bar">Preview</div>
       <div className="left">
-        <Character components={[rank, char, body, head, hand, feet, amulet]} />
+        <Character
+          components={[rank, char, body, head, hand, feet, weapon, amulet]}
+        />
       </div>
 
       <div className="panel right half">
@@ -141,6 +153,13 @@ function CharDesigner() {
           type="feet"
           value={feet}
           setValue={setFeet}
+        />
+
+        <CharDesignerSelector
+          title="Weapon"
+          type="weapon"
+          value={weapon}
+          setValue={setWeapon}
         />
 
         <CharDesignerSelector
