@@ -32,7 +32,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 14; i++) {
+  for (let i = 1; i <= 15; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "body",
@@ -41,7 +41,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 12; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "head",
@@ -52,17 +52,16 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 6; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "hand",
       name: `hand-${idx}`,
       fileName: `hand-${idx}`,
-      // className: "glow-below",
     });
   }
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 8; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "feet",
@@ -72,7 +71,7 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 16; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "weapon",
@@ -81,12 +80,30 @@ export default function initCharDesigner(_context: Context) {
     });
   }
 
-  for (let i = 1; i <= 1; i++) {
+  for (let i = 1; i <= 7; i++) {
+    const idx = i.toString().padStart(2, "0");
+    Character.registerComponent({
+      type: "offhand",
+      name: `offhand-${idx}`,
+      fileName: `offhand-${idx}`,
+    });
+  }
+
+  for (let i = 1; i <= 3; i++) {
     const idx = i.toString().padStart(2, "0");
     Character.registerComponent({
       type: "amulet",
       name: `amulet-${idx}`,
       fileName: `amulet-${idx}`,
+    });
+  }
+
+  for (let i = 1; i <= 4; i++) {
+    const idx = i.toString().padStart(2, "0");
+    Character.registerComponent({
+      type: "extra",
+      name: `extra-${idx}`,
+      fileName: `extra-${idx}`,
     });
   }
 }
@@ -99,14 +116,27 @@ function CharDesigner() {
   const [hand, setHand] = useState("");
   const [feet, setFeet] = useState("");
   const [weapon, setWeapon] = useState("");
+  const [offhand, setOffhand] = useState("");
   const [amulet, setAmulet] = useState("");
+  const [extra, setExtra] = useState("");
 
   return (
     <div className="panel">
       <div className="title-bar">Preview</div>
       <div className="left">
         <Character
-          components={[rank, char, body, head, hand, feet, weapon, amulet]}
+          components={[
+            rank,
+            char,
+            body,
+            head,
+            hand,
+            feet,
+            weapon,
+            offhand,
+            amulet,
+            extra,
+          ]}
         />
       </div>
 
@@ -163,10 +193,24 @@ function CharDesigner() {
         />
 
         <CharDesignerSelector
+          title="Offhand"
+          type="offhand"
+          value={offhand}
+          setValue={setOffhand}
+        />
+
+        <CharDesignerSelector
           title="Amulet"
           type="amulet"
           value={amulet}
           setValue={setAmulet}
+        />
+
+        <CharDesignerSelector
+          title="Extra"
+          type="extra"
+          value={extra}
+          setValue={setExtra}
         />
       </div>
     </div>
