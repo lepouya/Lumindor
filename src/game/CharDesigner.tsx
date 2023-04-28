@@ -59,7 +59,7 @@ function CharDesigner() {
             </div>
             <div className="half left">
               <Character
-                components={[char[type as ComponentType]]}
+                components={[char[type as ComponentType], char["rank"]]}
                 smallIcon={true}
               />
               <select

@@ -66,7 +66,7 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
           : component.fileName;
         const zIndex =
           component.zIndex ?? defaultComponentOrder[component.type];
-        const backgroundColor = component.color;
+        const backgroundColor = props.smallIcon ? undefined : component.color;
         const backgroundImage = fileName
           ? `url(characters/${fileName}.png)`
           : undefined;

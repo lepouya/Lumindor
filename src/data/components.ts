@@ -5,12 +5,12 @@ export const components: Record<
   Record<string, Partial<Component>>
 > = {
   rank: {
-    E: { color: "lightgray" },
-    D: { color: "white" },
-    C: { color: "lightgreen" },
-    B: { color: "lightblue" },
-    A: { color: "orchid" },
-    S: { color: "gold" },
+    E: { color: "#D3D3D3", overlayIconFileName: "rank-E-icon" },
+    D: { color: "#FFFFFF", overlayIconFileName: "rank-D-icon" },
+    C: { color: "#90EE90", overlayIconFileName: "rank-C-icon" },
+    B: { color: "#ADD8E6", overlayIconFileName: "rank-B-icon" },
+    A: { color: "#DA70D6", overlayIconFileName: "rank-A-icon" },
+    S: { color: "#FFD700", overlayIconFileName: "rank-S-icon" },
   },
   cloak: {},
   character: {
