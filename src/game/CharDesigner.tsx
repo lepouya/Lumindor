@@ -83,6 +83,7 @@ function CharDesigner() {
                 ))}
               </select>
             </div>
+            <hr className="underlined separator" />
           </Fragment>
         ))}
       </div>
