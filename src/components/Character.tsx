@@ -8,6 +8,7 @@ export type CharacterProps = {
   components: (Component | string)[];
 
   scale?: number;
+  smallIcon?: boolean;
 
   className?: string;
   style?: React.CSSProperties;
@@ -23,7 +24,7 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
     )
     .filter(Boolean);
   const overlayComponents = components.filter(
-    (component) => component.overlayFileName,
+    (component) => component.overlayFileName || component.overlayIconFileName,
   );
 
   components.sort((a, b) => {
@@ -38,9 +39,12 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
   });
 
   let style = props.style;
-  if (props.scale && props.scale !== 1) {
-    style = { ...style, "--scale": props.scale };
-  }
+  style = {
+    ...style,
+    "--scale": props.scale ?? 1,
+    "--h-factor": props.smallIcon ? 0.125 : 1,
+    "--v-factor": props.smallIcon ? 0.125 : 2,
+  };
 
   // Set the default glow color to be the background rank color
   let glowClass = "",
@@ -55,11 +59,14 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
   return (
     <div className={Arr.className("character", props.className)} style={style}>
       {components.map((component, idx) => {
+        const fileName = props.smallIcon
+          ? component.iconFileName
+          : component.fileName;
         const zIndex =
           component.zIndex ?? defaultComponentOrder[component.type];
         const backgroundColor = component.color;
-        const backgroundImage = component.fileName
-          ? `url(characters/${component.fileName}.png)`
+        const backgroundImage = fileName
+          ? `url(characters/${fileName}.png)`
           : undefined;
         const filter = component.effects;
         const animation = component.animation;
@@ -90,9 +97,14 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
         );
       })}
       {overlayComponents.map((component, idx) => {
+        const fileName = props.smallIcon
+          ? component.overlayIconFileName
+          : component.overlayFileName;
         const zIndex =
           10 + (component.zIndex ?? defaultComponentOrder[component.type]);
-        const backgroundImage = `url(characters/${component.overlayFileName}.png)`;
+        const backgroundImage = fileName
+          ? `url(characters/${fileName}.png)`
+          : undefined;
         const style = {
           ...component.style,
           backgroundImage,
@@ -124,7 +136,9 @@ export type Component = {
   name: string;
 
   fileName?: string;
+  iconFileName?: string;
   overlayFileName?: string;
+  overlayIconFileName?: string;
 
   zIndex?: number;
   overlayZIndex?: number;

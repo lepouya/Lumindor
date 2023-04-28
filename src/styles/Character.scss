@@ -8,8 +8,10 @@ $cw: min(512px, 40vh, 80vw);
   flex: none;
 
   --scale: 1;
-  width: calc(var(--scale, 1) * $cw);
-  height: calc(2 * var(--scale, 1) * $cw);
+  --h-factor: 1;
+  --v-factor: 2;
+  width: calc(var(--h-factor, 1) * var(--scale, 1) * $cw);
+  height: calc(var(--v-factor, 2) * var(--scale, 1) * $cw);
 
   border: 1px solid gray;
   box-sizing: content-box;

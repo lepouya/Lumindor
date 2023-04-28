@@ -58,6 +58,10 @@ function CharDesigner() {
               <span>{Format.word(type, { capitalize: true })}: &nbsp;</span>
             </div>
             <div className="half left">
+              <Character
+                components={[char[type as ComponentType]]}
+                smallIcon={true}
+              />
               <select
                 name={type}
                 value={char[type as ComponentType]}
@@ -67,6 +71,7 @@ function CharDesigner() {
                     [type as ComponentType]: event.target.value,
                   })
                 }
+                style={{ width: "100%" }}
               >
                 {type !== "rank" && type !== "character" && (
                   <option value="">--</option>

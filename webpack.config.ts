@@ -36,7 +36,21 @@ function config(
         },
         {
           test: /\.(css|scss|sass|less|styl)$/i,
-          use: ["css-loader", "sass-loader"],
+          use: [
+            {
+              loader: "css-loader",
+              options: {
+                import: false,
+                sourceMap: !min,
+              },
+            },
+            {
+              loader: "sass-loader",
+              options: {
+                sourceMap: !min,
+              },
+            },
+          ],
         },
         {
           test: /\.pug$/,
