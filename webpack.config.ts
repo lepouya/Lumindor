@@ -68,7 +68,11 @@ function config(
 
     plugins: [
       new ProgressPlugin(),
-      new CopyPlugin({ patterns: [{ from: "assets" }] }),
+      new CopyPlugin({
+        patterns: [
+          { from: "assets", filter: (path) => !path.includes("/raw/") },
+        ],
+      }),
       new PugPlugin({
         pretty: !min,
         modules: [PugPlugin.extractCss({ filename: pkg.name + min + ".css" })],
