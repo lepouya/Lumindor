@@ -1,5 +1,7 @@
 import { PropsWithChildren } from "react";
 
+import { components } from "../data/components";
+import { ContextInitializers } from "../model/Context";
 import Arr from "../utils/arrays";
 
 export type CharacterProps = {
@@ -140,7 +142,7 @@ export type Component = {
 
 export type ComponentType =
   | "rank"
-  | "char"
+  | "character"
   | "body"
   | "head"
   | "feet"
@@ -154,7 +156,7 @@ export type ComponentType =
 const defaultComponentOrder: Record<ComponentType, number> = {
   rank: 0,
   cloak: 1,
-  char: 2,
+  character: 2,
   body: 3,
   head: 4,
   feet: 4,
@@ -170,7 +172,7 @@ const componentsByType: Record<ComponentType, Component[]> = {
   body: [],
   head: [],
   rank: [],
-  char: [],
+  character: [],
   feet: [],
   hand: [],
   weapon: [],
@@ -180,6 +182,8 @@ const componentsByType: Record<ComponentType, Component[]> = {
   extra: [],
 };
 
+Character.componentByName = componentRegistry;
+Character.componentsByType = componentsByType;
 Character.registerComponent = (component: Partial<Component>) => {
   const type = component.type ?? "extra";
   const name =
@@ -203,10 +207,14 @@ Character.registerComponent = (component: Partial<Component>) => {
   return newComponent;
 };
 
-Character.getComponentByName = (name: string) => {
-  return componentRegistry[name];
-};
-
-Character.getComponentsByType = (type: ComponentType) => {
-  return componentsByType[type];
-};
+ContextInitializers.push(() => {
+  for (let [type, cs] of Object.entries(components)) {
+    for (let [name, component] of Object.entries(cs)) {
+      Character.registerComponent({
+        ...component,
+        type: type as ComponentType,
+        name,
+      });
+    }
+  }
+});
