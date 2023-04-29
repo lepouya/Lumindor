@@ -1,8 +1,8 @@
-import { Component, ComponentType } from "../components/Character";
+import { ComponentRendering, ComponentType } from "../model/RPG";
 
 export const components: Record<
   ComponentType,
-  Record<string, Partial<Component>>
+  Record<string, Partial<ComponentRendering>>
 > = {
   rank: {
     E: { color: "#D3D3D3", overlayIconFileName: "rank-E-icon" },

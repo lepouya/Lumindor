@@ -2,10 +2,11 @@ import { PropsWithChildren } from "react";
 
 import { components } from "../data/components";
 import { ContextInitializers } from "../model/Context";
+import { ComponentRendering, ComponentType, ItemType } from "../model/RPG";
 import Arr from "../utils/arrays";
 
 export type CharacterProps = {
-  components: (Component | string)[];
+  components: (ComponentRendering | string)[];
 
   scale?: number;
   smallIcon?: boolean;
@@ -135,42 +136,6 @@ export default function Character(props: PropsWithChildren<CharacterProps>) {
   );
 }
 
-export type Component = {
-  type: ComponentType;
-  name: string;
-
-  fileName?: string;
-  iconFileName?: string;
-  overlayFileName?: string;
-  overlayIconFileName?: string;
-
-  zIndex?: number;
-  overlayZIndex?: number;
-
-  glowScale?: number;
-  overlayGlowScale?: number;
-
-  color?: string;
-  effects?: string;
-  animation?: string;
-
-  className?: string;
-  style?: React.CSSProperties;
-};
-
-export type ComponentType =
-  | "rank"
-  | "character"
-  | "body"
-  | "head"
-  | "feet"
-  | "hand"
-  | "weapon"
-  | "offhand"
-  | "cloak"
-  | "amulet"
-  | "extra";
-
 const defaultComponentOrder: Record<ComponentType, number> = {
   rank: 0,
   cloak: 1,
@@ -185,8 +150,8 @@ const defaultComponentOrder: Record<ComponentType, number> = {
   weapon: 7,
 };
 
-const componentRegistry: Record<string, Component> = {};
-const componentsByType: Record<ComponentType, Component[]> = {
+const componentRegistry: Record<string, ComponentRendering> = {};
+const componentsByType: Record<ComponentType, ComponentRendering[]> = {
   body: [],
   head: [],
   rank: [],
@@ -202,11 +167,11 @@ const componentsByType: Record<ComponentType, Component[]> = {
 
 Character.componentByName = componentRegistry;
 Character.componentsByType = componentsByType;
-Character.registerComponent = (component: Partial<Component>) => {
+Character.registerComponent = (component: Partial<ComponentRendering>) => {
   const type = component.type ?? "extra";
   const name =
     component.name ?? type + "-" + (Object.keys(componentRegistry).length + 1);
-  let newComponent: Component = { type, name };
+  let newComponent: ComponentRendering = { type, name };
 
   newComponent = {
     ...newComponent,
@@ -230,7 +195,7 @@ ContextInitializers.push(() => {
     for (let [name, component] of Object.entries(cs)) {
       Character.registerComponent({
         ...component,
-        type: type as ComponentType,
+        type: type as ItemType,
         name,
       });
     }

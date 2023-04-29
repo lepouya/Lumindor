@@ -1,8 +1,9 @@
 import { Fragment, useState } from "react";
 
-import Character, { ComponentType } from "../components/Character";
+import Character from "../components/Character";
 import Game from "../components/Game";
 import { Context } from "../model/Context";
+import { ComponentType } from "../model/RPG";
 import Format from "../utils/format";
 
 export default function initCharDesigner(_context: Context) {
