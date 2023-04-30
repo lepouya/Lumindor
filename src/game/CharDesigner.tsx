@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import Character from "../components/Character";
 import Game from "../components/Game";
 import { Context } from "../model/Context";
-import { ComponentType } from "../model/RPG";
+import RPG, { ComponentType } from "../model/RPG";
 import Format from "../utils/format";
 
 export default function initCharDesigner(_context: Context) {
@@ -77,7 +77,7 @@ function CharDesigner() {
                 {type !== "rank" && type !== "character" && (
                   <option value="">--</option>
                 )}
-                {Character.componentsByType[type as ComponentType].map((c) => (
+                {RPG.itemsByType[type as ComponentType].map((c) => (
                   <option key={c.name} value={c.name}>
                     {c.name}
                   </option>

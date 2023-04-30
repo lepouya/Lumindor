@@ -1,8 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { components } from "../data/components";
-import { ContextInitializers } from "../model/Context";
-import { ComponentRendering, ComponentType, ItemType } from "../model/RPG";
+import RPG, { ComponentRendering, ComponentType } from "../model/RPG";
 import Arr from "../utils/arrays";
 
 export type CharacterProps = {
@@ -21,9 +19,11 @@ export type CharacterProps = {
 export default function Character(props: PropsWithChildren<CharacterProps>) {
   const components = props.components
     .map((component) =>
-      typeof component === "string" ? componentRegistry[component] : component,
+      typeof component === "string"
+        ? RPG.itemByName[component]?.rendering
+        : component,
     )
-    .filter(Boolean);
+    .filter(Boolean) as ComponentRendering[];
   const overlayComponents = components.filter(
     (component) => component.overlayFileName || component.overlayIconFileName,
   );
@@ -149,55 +149,3 @@ const defaultComponentOrder: Record<ComponentType, number> = {
   offhand: 6,
   weapon: 7,
 };
-
-const componentRegistry: Record<string, ComponentRendering> = {};
-const componentsByType: Record<ComponentType, ComponentRendering[]> = {
-  body: [],
-  head: [],
-  rank: [],
-  character: [],
-  feet: [],
-  hand: [],
-  weapon: [],
-  offhand: [],
-  cloak: [],
-  amulet: [],
-  extra: [],
-};
-
-Character.componentByName = componentRegistry;
-Character.componentsByType = componentsByType;
-Character.registerComponent = (component: Partial<ComponentRendering>) => {
-  const type = component.type ?? "extra";
-  const name =
-    component.name ?? type + "-" + (Object.keys(componentRegistry).length + 1);
-  let newComponent: ComponentRendering = { type, name };
-
-  newComponent = {
-    ...newComponent,
-    ...componentRegistry[name],
-    ...component,
-  };
-  componentRegistry[newComponent.name] = newComponent;
-  componentsByType[newComponent.type] = componentsByType[
-    newComponent.type
-  ].filter((c) => c.name !== newComponent.name);
-  componentsByType[newComponent.type].push(newComponent);
-  componentsByType[newComponent.type].sort((a, b) =>
-    a.name.localeCompare(b.name),
-  );
-
-  return newComponent;
-};
-
-ContextInitializers.push(() => {
-  for (let [type, cs] of Object.entries(components)) {
-    for (let [name, component] of Object.entries(cs)) {
-      Character.registerComponent({
-        ...component,
-        type: type as ItemType,
-        name,
-      });
-    }
-  }
-});

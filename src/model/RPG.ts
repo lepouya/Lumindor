@@ -1,3 +1,6 @@
+import { items } from "../data/items";
+import { Optional, Replace } from "../utils/types";
+
 export type ItemType =
   | "body"
   | "head"
@@ -64,7 +67,7 @@ export type Item = {
   description?: string;
   rendering?: ComponentRendering;
 
-  stats?: Record<StatType, number | undefined>;
+  stats?: Partial<Record<StatType, number>>;
   statBoosts?: StatBoost[];
   rankBoosts?: Record<string, StatBoost[]>;
 };
@@ -79,7 +82,7 @@ export type InventoyItem = {
 };
 
 export type Character = InventoyItem & {
-  equipment: Record<ItemType, InventoyItem | undefined>;
+  equipment: Partial<Record<ItemType, InventoyItem>>;
 };
 
 export type Player = {
@@ -106,7 +109,7 @@ const emptyStats: Record<StatType, number> = {
 };
 
 function addStats(
-  ...stats: (Record<StatType, number | undefined> | undefined)[]
+  ...stats: Optional<Record<StatType, number>>[]
 ): Record<StatType, number> {
   return stats.reduce(
     (acc: Record<StatType, number>, stat) => {
@@ -176,7 +179,7 @@ function applyCumulativeStatBoosts(
     );
 }
 
-export function computeItemStats(
+function computeItemStats(
   inventoryItem: InventoyItem,
   customBoosts: StatBoost[] = [],
 ): [Record<StatType, number>, StatBoost[]] {
@@ -205,7 +208,7 @@ export function computeItemStats(
   return [stats, boosts];
 }
 
-export function computeCharacterStats(
+function computeCharacterStats(
   character: Character,
   customBoosts: StatBoost[] = [],
 ): Record<StatType, number> {
@@ -231,3 +234,60 @@ export function computeCharacterStats(
 
   return stats;
 }
+
+const itemRegistry: Record<string, Item> = {};
+const itemsByType: Record<ComponentType, Item[]> = {
+  body: [],
+  head: [],
+  rank: [],
+  character: [],
+  feet: [],
+  hand: [],
+  weapon: [],
+  offhand: [],
+  cloak: [],
+  amulet: [],
+  extra: [],
+};
+
+export type LoadablePartialItem = Replace<
+  Partial<Item>,
+  ComponentRendering,
+  Partial<ComponentRendering>
+>;
+
+function registerItem(item: LoadablePartialItem) {
+  const type = item.type ?? "extra";
+  const name = item.name ?? type + "-" + (Object.keys(itemRegistry).length + 1);
+  const newItem: Item = {
+    type,
+    name,
+    ...item,
+    rendering: { type, name, ...item.rendering },
+  };
+
+  itemRegistry[newItem.name] = newItem;
+  itemsByType[newItem.type] = itemsByType[newItem.type].filter(
+    (c) => c.name !== newItem.name,
+  );
+  itemsByType[newItem.type].push(newItem);
+  itemsByType[newItem.type].sort((a, b) => a.name.localeCompare(b.name));
+
+  return newItem;
+}
+
+for (let [type, its] of Object.entries(items)) {
+  for (let [name, item] of Object.entries(its)) {
+    registerItem({ type: type as ComponentType, name, ...item });
+  }
+}
+
+const RPG = {
+  itemByName: itemRegistry,
+  itemsByType,
+  registerItem,
+  computeItemStats,
+  computeCharacterStats,
+};
+
+export default RPG;
