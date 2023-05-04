@@ -5,6 +5,7 @@ import Game from "../components/Game";
 import { Context } from "../model/Context";
 import RPG, { ComponentType } from "../model/RPG";
 import Format from "../utils/format";
+import Obj from "../utils/objects";
 
 export default function initCharDesigner(_context: Context) {
   Game.registerTab({
@@ -14,6 +15,21 @@ export default function initCharDesigner(_context: Context) {
     heading: "Character Designer",
     body: () => <CharDesigner />,
   });
+}
+
+function getJson(name = "") {
+  return (
+    name &&
+    JSON.stringify(
+      { stats: {}, statBoosts: [], rankBoosts: {}, ...RPG.itemByName[name] },
+      (key, value) =>
+        (typeof key === "string" && key.startsWith("_")) ||
+        ["name", "type", "rendering"].includes(key)
+          ? undefined
+          : value,
+      2,
+    )
+  );
 }
 
 function CharDesigner() {
@@ -30,6 +46,7 @@ function CharDesigner() {
     "offhand",
     "extra",
   ];
+
   const [char, setChar] = useState<Record<ComponentType, string>>({
     body: "",
     head: "",
@@ -44,6 +61,10 @@ function CharDesigner() {
     extra: "",
   });
 
+  const [items, setItems] = useState<Record<ComponentType, string>>(() =>
+    Obj.map(char, getJson),
+  );
+
   return (
     <div className="panel">
       <div className="title-bar">Preview</div>
@@ -51,28 +72,24 @@ function CharDesigner() {
         <Character components={Object.values(char)} />
       </div>
 
-      <div className="panel right half">
+      <div className="panel full">
         <div className="title-bar">Character Design</div>
         {componentsOrder.map((type) => (
           <Fragment key={`frag-${type}`}>
-            <div className="half right">
-              <span>{Format.word(type, { capitalize: true })}: &nbsp;</span>
+            <div className="full bold left">
+              <span>{Format.word(type, { capitalize: true })}</span>
             </div>
+
             <div className="half left">
-              <Character
-                components={[char[type as ComponentType], char["rank"]]}
-                smallIcon={true}
-              />
               <select
                 name={type}
                 value={char[type as ComponentType]}
-                onChange={(event) =>
-                  setChar({
-                    ...char,
-                    [type as ComponentType]: event.target.value,
-                  })
-                }
-                style={{ width: "100%" }}
+                onChange={(event) => {
+                  const name = event.target.value;
+                  setChar({ ...char, [type]: name });
+                  setItems({ ...items, [type]: getJson(name) });
+                }}
+                style={{ width: "90%" }}
               >
                 {type !== "rank" && type !== "character" && (
                   <option value="">--</option>
@@ -84,6 +101,50 @@ function CharDesigner() {
                 ))}
               </select>
             </div>
+
+            <div className="half left">
+              <Character
+                components={[char[type as ComponentType], char["rank"]]}
+                smallIcon={true}
+              />
+            </div>
+
+            <div className="half left">
+              <textarea
+                value={items[type as ComponentType]}
+                onChange={(event) => {
+                  const name = char[type as ComponentType];
+                  const value = event.target.value;
+                  setItems({
+                    ...items,
+                    [type]: name ? value : undefined,
+                  });
+                  try {
+                    const parsed = JSON.parse(value);
+                    if (parsed && typeof parsed === "object") {
+                      Obj.copy(parsed, RPG.itemByName[name]);
+                    }
+                  } catch (_) {}
+                }}
+                style={{ width: "90%", height: "10em" }}
+              />
+            </div>
+
+            <div className="half left">
+              <pre>
+                {char[type as ComponentType] &&
+                  JSON.stringify(
+                    RPG.computeItemStats({
+                      item: char[type as ComponentType],
+                      rank: type !== "rank" ? char["rank"] : "",
+                      count: 1,
+                    }),
+                    null,
+                    2,
+                  )}
+              </pre>
+            </div>
+
             <hr className="underlined separator" />
           </Fragment>
         ))}

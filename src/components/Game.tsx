@@ -36,6 +36,11 @@ export default function Game() {
     const updated = context.resourceManager.update(undefined, "tick");
     if (updated.includes(true)) {
       // Needs update
+      setLastRendered((lastRendered) =>
+        settings.lastUpdate - lastRendered >= 1000.0 / settings.framesPerSecond
+          ? settings.lastUpdate
+          : lastRendered,
+      );
     }
 
     // Save game
@@ -50,11 +55,11 @@ export default function Game() {
     }
 
     // Force re-render of child components
-    setLastRendered((lastRendered) =>
-      settings.lastUpdate - lastRendered >= 1000.0 / settings.framesPerSecond
-        ? settings.lastUpdate
-        : lastRendered,
-    );
+    // setLastRendered((lastRendered) =>
+    //   settings.lastUpdate - lastRendered >= 1000.0 / settings.framesPerSecond
+    //     ? settings.lastUpdate
+    //     : lastRendered,
+    // );
   }, [context, settings, save, setLastRendered]);
 
   useEffect(

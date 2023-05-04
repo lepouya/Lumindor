@@ -73,9 +73,9 @@ export type Item = {
 };
 
 export type InventoyItem = {
-  item: Item;
-  rank: Item;
-  count: number;
+  item: Item | string;
+  rank: Item | string;
+  count?: number;
 
   unique?: boolean;
   customBoosts?: StatBoost[];
@@ -129,20 +129,18 @@ function applyBaseStatBoosts(
   statTypes: StatType[],
   ...boosts: StatBoost[]
 ): Record<StatType, number> {
-  return boosts
-    .filter((boost) => statTypes.includes(boost.stat))
-    .reduce(
-      (acc, boost) => {
-        const stat = acc[boost.stat];
-        const baseValue = boost.baseValue ?? 0;
-        const multiplier = boost.multiplier ?? 1;
-        const addBonus = boost.addBonus ?? 0;
-
-        acc[boost.stat] = stat + baseValue * multiplier + addBonus;
-        return acc;
-      },
-      { ...stats },
-    );
+  boosts = boosts.filter((boost) => statTypes.includes(boost.stat));
+  const res = { ...stats };
+  for (const boost of boosts) {
+    res[boost.stat] += boost.baseValue ?? 0;
+  }
+  for (const boost of boosts) {
+    res[boost.stat] *= boost.multiplier ?? 1;
+  }
+  for (const boost of boosts) {
+    res[boost.stat] += boost.addBonus ?? 0;
+  }
+  return res;
 }
 
 function computeDerivativeStats(
@@ -183,14 +181,22 @@ function computeItemStats(
   inventoryItem: InventoyItem,
   customBoosts: StatBoost[] = [],
 ): [Record<StatType, number>, StatBoost[]] {
+  const item =
+    typeof inventoryItem.item === "string"
+      ? itemRegistry[inventoryItem.item]
+      : inventoryItem.item;
+  const rank =
+    typeof inventoryItem.rank === "string"
+      ? itemRegistry[inventoryItem.rank]
+      : inventoryItem.rank;
   const boosts = [
-    ...(inventoryItem.item.statBoosts ?? []),
-    ...(inventoryItem.rank.statBoosts ?? []),
-    ...(inventoryItem.item.rankBoosts?.[inventoryItem.rank.name] ?? []),
+    ...(item?.statBoosts ?? []),
+    ...(rank?.statBoosts ?? []),
+    ...(item?.rankBoosts?.[rank?.name ?? ""] ?? []),
     ...(inventoryItem.customBoosts ?? []),
   ];
 
-  let stats = addStats(inventoryItem.item.stats, inventoryItem.rank.stats);
+  let stats = addStats(item?.stats, rank?.stats);
   stats = applyBaseStatBoosts(
     stats,
     ["STR", "DEX", "MAG"],
@@ -271,7 +277,6 @@ function registerItem(item: LoadablePartialItem) {
     (c) => c.name !== newItem.name,
   );
   itemsByType[newItem.type].push(newItem);
-  itemsByType[newItem.type].sort((a, b) => a.name.localeCompare(b.name));
 
   return newItem;
 }
@@ -282,12 +287,11 @@ for (let [type, its] of Object.entries(items)) {
   }
 }
 
-const RPG = {
+export default {
   itemByName: itemRegistry,
   itemsByType,
+  emptyStats: { ...emptyStats },
   registerItem,
   computeItemStats,
   computeCharacterStats,
 };
-
-export default RPG;
